@@ -33,6 +33,7 @@ const getPullRequests = async (username, token, repoName) =>
     }
   });
 
+// TODO: Still need to handle duplication. . .
 const insertPullRequests = (username, token) => {
   var repos = document.querySelectorAll("[data-filterable-for] li h3 a");
 
