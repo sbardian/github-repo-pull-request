@@ -1,25 +1,60 @@
-import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { Component } from "react";
+import { Button, TextField } from "@material-ui/core";
+import SaveIcon from "@material-ui/icons/Save";
+import "./App.css";
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      username: "",
+      token: ""
+    };
+  }
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value
+    });
+  };
+
+  handleSave = () => {
+    console.log("save");
+  };
+
   render() {
+    const { username, token } = this.state;
+
     return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+      <div className="App" style={{ height: "200px", width: "300px" }}>
+        <form autoCapitalize="off" autoComplete="off">
+          <TextField
+            id="outlined-name"
+            label="Github Username"
+            value={username}
+            onChange={this.handleChange("username")}
+            margin="normal"
+            variant="outlined"
+          />
+          <TextField
+            id="outlined-name"
+            label="Access Token"
+            value={token}
+            onChange={this.handleChange("token")}
+            margin="normal"
+            variant="outlined"
+          />
+          <div>
+            <Button
+              variant="contained"
+              size="medium"
+              onClick={() => this.handleSave()}
+            >
+              <SaveIcon />
+              Save
+            </Button>
+          </div>
+        </form>
       </div>
     );
   }
