@@ -1,15 +1,22 @@
 {
   "short_name": "Github Repo Pull Requests Extension",
   "name": "Github Repo Pull Requests Extension",
-  "icons": [
+  "version": "1.0",
+  "description": "A chrome extenstion that displays a repos pull requests.",
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  "permissions": ["storage", "declarativeContent", "activeTab"],
+  "page_action": {
+    "default_popup": "index.html"
+  },
+  "content_scripts": [
     {
-      "src": "favicon.ico",
-      "sizes": "64x64 32x32 24x24 16x16",
-      "type": "image/x-icon"
+      "matches": ["https://*.github.com/*repositories"],
+      "run_at": "document_idle",
+      "js": ["contentScript.js"]
     }
   ],
-  "start_url": ".",
-  "display": "standalone",
-  "theme_color": "#000000",
-  "background_color": "#ffffff"
+  "manifest_version": 2
 }
