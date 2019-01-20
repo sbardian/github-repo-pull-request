@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Github Repo Pull Requests Extension",
+  "name": "Github Repo Pull Requests Extension",
   "icons": [
     {
       "src": "favicon.ico",
