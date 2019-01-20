@@ -12,6 +12,21 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    // const { username, token } = JSON.parse(localStorage.getItem("GHRPR"));
+    const GHRPR = localStorage.getItem("GHRPR");
+    if (GHRPR) {
+      const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
+      const { username, token } = localStorageObj;
+      this.setState({
+        username,
+        token
+      });
+    } else {
+      console.log("No username or token available.");
+    }
+  }
+
   handleChange = name => event => {
     this.setState({
       [name]: event.target.value
@@ -19,7 +34,19 @@ class App extends Component {
   };
 
   handleSave = () => {
-    console.log("save");
+    const { username, token } = this.state;
+    const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
+    const { username: oldUsername, oldToken } = localStorageObj;
+    if (username !== oldUsername || token !== oldToken) {
+      localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
+      window.chrome.tabs.query({ active: true, currentWindow: true }, function(
+        tabs
+      ) {
+        window.chrome.tabs.sendMessage(tabs[0].id, {
+          data: { username, token }
+        });
+      });
+    }
   };
 
   render() {
