@@ -28,6 +28,7 @@ class App extends Component {
   }
 
   handleChange = name => event => {
+    console.log(event.target.value);
     this.setState({
       [name]: event.target.value
     });
@@ -35,9 +36,23 @@ class App extends Component {
 
   handleSave = () => {
     const { username, token } = this.state;
+    console.log("New Username: ", username, ", New Token: ", token);
     const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
-    const { username: oldUsername, oldToken } = localStorageObj;
-    if (username !== oldUsername || token !== oldToken) {
+    if (localStorageObj) {
+      const { username: oldUsername, token: oldToken } = localStorageObj;
+      console.log("Old Username: ", oldUsername, ", Old Token: ", oldToken);
+      if (username !== oldUsername || token !== oldToken) {
+        localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
+        window.chrome.tabs.query(
+          { active: true, currentWindow: true },
+          function(tabs) {
+            window.chrome.tabs.sendMessage(tabs[0].id, {
+              data: { username, token }
+            });
+          }
+        );
+      }
+    } else {
       localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
       window.chrome.tabs.query({ active: true, currentWindow: true }, function(
         tabs
