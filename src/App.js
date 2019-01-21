@@ -34,33 +34,27 @@ class App extends Component {
     });
   };
 
+  saveToLocalStorage = (username, token) => {
+    localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
+    window.chrome.tabs.query({ active: true, currentWindow: true }, function(
+      tabs
+    ) {
+      window.chrome.tabs.sendMessage(tabs[0].id, {
+        data: { username, token }
+      });
+    });
+  };
+
   handleSave = () => {
     const { username, token } = this.state;
-    console.log("New Username: ", username, ", New Token: ", token);
     const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
     if (localStorageObj) {
       const { username: oldUsername, token: oldToken } = localStorageObj;
-      console.log("Old Username: ", oldUsername, ", Old Token: ", oldToken);
       if (username !== oldUsername || token !== oldToken) {
-        localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
-        window.chrome.tabs.query(
-          { active: true, currentWindow: true },
-          function(tabs) {
-            window.chrome.tabs.sendMessage(tabs[0].id, {
-              data: { username, token }
-            });
-          }
-        );
+        this.saveToLocalStorage(username, token);
       }
     } else {
-      localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
-      window.chrome.tabs.query({ active: true, currentWindow: true }, function(
-        tabs
-      ) {
-        window.chrome.tabs.sendMessage(tabs[0].id, {
-          data: { username, token }
-        });
-      });
+      this.saveToLocalStorage(username, token);
     }
   };
 
