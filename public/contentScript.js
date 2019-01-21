@@ -10,17 +10,9 @@ window.chrome.runtime.onMessage.addListener(function(
   );
   if (request.data) {
     const { username, token } = request.data;
-    window.chrome.storage.sync.set(
-      { GHRPR: JSON.stringify({ username, token }) },
-      function(response) {
-        console.log(
-          "Background localStorage is set to ",
-          response.username,
-          ", - ",
-          response.token
-        );
-      }
-    );
+    window.chrome.storage.sync.set({
+      GHRPR: JSON.stringify({ username, token })
+    });
     insertPullRequests(username, token);
     sendResponse({ error: false });
   }
@@ -35,27 +27,45 @@ const getPullRequests = async (username, token, repoName) =>
 
 // TODO: Still need to handle duplication. . .
 const insertPullRequests = (username, token) => {
-  var repos = document.querySelectorAll("[data-filterable-for] li h3 a");
+  const repos = document.querySelectorAll("[data-filterable-for] li h3");
 
-  repos.forEach(async li => {
-    const repoName = li.innerHTML.trim();
+  repos.forEach(async repo => {
+    const repoName = repo.querySelector("a:first-child").innerHTML.trim();
+    console.log("repoName = ", repoName);
     if (username && token) {
       const PRUrl = `https://github.com/${username}/${repoName}/pulls`;
       const result = await getPullRequests(username, token, repoName);
       const pullRequests = await result.json();
 
-      const toAppend = document.createElement("div");
-      const PRLink = document.createElement("a");
+      const prSelector = `#ghrpr-${repoName}-container`;
+      const doesExist = repo.parentElement.querySelectorAll(prSelector);
+      if (doesExist.length) {
+        console.log("doesExist");
+        const currentCount = document.getElementById(`ghrpr-${repoName}-count`);
+        console.log("html length = ", parseInt(currentCount.innerHTML, 10));
+        console.log("pr.length = ", pullRequests.length);
+        if (parseInt(currentCount.innerHTML, 10) !== pullRequests.length) {
+          console.log("!equal");
+          document.getElementById(`ghrpr-${repoName}-count`).innerHTML =
+            pullRequests.length;
+        }
+      } else {
+        const toAppend = document.createElement("div");
+        toAppend.setAttribute("id", `ghrpr-${repoName}-container`);
 
-      PRLink.setAttribute("href", PRUrl);
-      PRLink.innerText = `Pull Requests: ${pullRequests.length}`;
-      PRLink.style.color = "green";
-      PRLink.style.fontSize = "10pt";
+        const PRLink = document.createElement("a");
+        PRLink.setAttribute("href", PRUrl);
+        PRLink.innerHTML = `Pull Requests: <b id="ghrpr-${repoName}-count">${
+          pullRequests.length
+        }</b>`;
+        PRLink.style.color = "green";
+        PRLink.style.fontSize = "10pt";
 
-      toAppend.append(PRLink);
+        toAppend.append(PRLink);
 
-      if (pullRequests[0]) {
-        li.after(toAppend);
+        if (pullRequests[0]) {
+          repo.after(toAppend);
+        }
       }
     } else {
       console.log("No username or token");
