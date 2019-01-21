@@ -28,24 +28,33 @@ class App extends Component {
   }
 
   handleChange = name => event => {
+    console.log(event.target.value);
     this.setState({
       [name]: event.target.value
+    });
+  };
+
+  saveToLocalStorage = (username, token) => {
+    localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
+    window.chrome.tabs.query({ active: true, currentWindow: true }, function(
+      tabs
+    ) {
+      window.chrome.tabs.sendMessage(tabs[0].id, {
+        data: { username, token }
+      });
     });
   };
 
   handleSave = () => {
     const { username, token } = this.state;
     const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
-    const { username: oldUsername, oldToken } = localStorageObj;
-    if (username !== oldUsername || token !== oldToken) {
-      localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
-      window.chrome.tabs.query({ active: true, currentWindow: true }, function(
-        tabs
-      ) {
-        window.chrome.tabs.sendMessage(tabs[0].id, {
-          data: { username, token }
-        });
-      });
+    if (localStorageObj) {
+      const { username: oldUsername, token: oldToken } = localStorageObj;
+      if (username !== oldUsername || token !== oldToken) {
+        this.saveToLocalStorage(username, token);
+      }
+    } else {
+      this.saveToLocalStorage(username, token);
     }
   };
 
