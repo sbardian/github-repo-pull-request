@@ -27,13 +27,6 @@ class App extends Component {
     }
   }
 
-  handleChange = name => event => {
-    console.log(event.target.value);
-    this.setState({
-      [name]: event.target.value
-    });
-  };
-
   saveToLocalStorage = (username, token) => {
     localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
     window.chrome.tabs.query({ active: true, currentWindow: true }, function(
@@ -42,6 +35,12 @@ class App extends Component {
       window.chrome.tabs.sendMessage(tabs[0].id, {
         data: { username, token }
       });
+    });
+  };
+
+  handleChange = name => event => {
+    this.setState({
+      [name]: event.target.value
     });
   };
 
