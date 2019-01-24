@@ -1,3 +1,10 @@
+// Update localStorage with username and token
+window.chrome.storage.sync.get(["GHRPR"], function(result) {
+  const { username, token } = JSON.parse(result.GHRPR);
+  insertPullRequests(username, token);
+});
+
+// Get username and token message from popup
 window.chrome.runtime.onMessage.addListener(function(
   request,
   sender,
@@ -13,6 +20,7 @@ window.chrome.runtime.onMessage.addListener(function(
   }
 });
 
+// Fetch PRs from api.github.com
 const getPullRequests = async (username, token, repoName) =>
   await fetch(`https://api.github.com/repos/${username}/${repoName}/pulls`, {
     headers: {
@@ -20,6 +28,7 @@ const getPullRequests = async (username, token, repoName) =>
     }
   });
 
+// Inject PRs into Github Repositories page
 const insertPullRequests = (username, token) => {
   const repos = document.querySelectorAll("[data-filterable-for] li h3");
 
@@ -55,13 +64,3 @@ const insertPullRequests = (username, token) => {
     }
   });
 };
-
-window.chrome.storage.sync.get(["GHRPR"], function(result) {
-  const { username, token } = JSON.parse(result.GHRPR);
-  insertPullRequests(username, token);
-});
-
-/**
- * TODO: bring user and token in using some setting in the extension.
- * User supplies their own person access token.
- */

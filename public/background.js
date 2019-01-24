@@ -17,30 +17,3 @@ chrome.runtime.onInstalled.addListener(function() {
     ]);
   });
 });
-
-// function someFunction({ username, token }) {
-//   console.log("username = ", username, ", token = ", token);
-
-//   chrome.storage.sync.set(
-//     { GHRPR: JSON.stringify({ username, token }) },
-//     function() {
-//       console.log("Background localStorage is set to " + value);
-//     }
-//   );
-
-//   chrome.tabs.query({ active: true, currentWindow: true }, function(tabs) {
-//     chrome.tabs.sendMessage(tabs[0].id, { data: { username, token } }, function(
-//       response
-//     ) {
-//       console.log(response.error);
-//     });
-//   });
-// }
-
-// chrome.storage.sync.get(["GHRPR"], function(result) {
-//   console.log("Background localStorage currently is " + result.GHRPR);
-//   const { username, token } = result.GHRPR;
-//   chrome.runtime.sendMessage({ data: { username, token } }, function(response) {
-//     console.log(response);
-//   });
-// });
