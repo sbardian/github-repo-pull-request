@@ -9,7 +9,6 @@
   },
   "permissions": ["storage", "declarativeContent", "activeTab"],
   "page_action": {
-    "default_icon": "logo.svg",
     "default_popup": "index.html"
   },
   "content_scripts": [
