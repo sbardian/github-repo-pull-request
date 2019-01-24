@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import { Button, TextField } from "@material-ui/core";
 import SaveIcon from "@material-ui/icons/Save";
-import "./App.css";
 
 class App extends Component {
   constructor(props) {
@@ -62,7 +61,24 @@ class App extends Component {
 
     return (
       <div className="App" style={{ height: "200px", width: "300px" }}>
-        <form autoCapitalize="off" autoComplete="off">
+        <form
+          autoCapitalize="off"
+          autoComplete="off"
+          style={{
+            display: "flex",
+            flexWrap: "wrap",
+            justifyContent: "center"
+          }}
+        >
+          <div
+            style={{
+              fontSize: "18pt",
+              marginTop: "20px",
+              marginBottom: "20px"
+            }}
+          >
+            GitHub Repo Pull Requests
+          </div>
           <TextField
             id="outlined-name"
             label="Github Username"
@@ -83,6 +99,10 @@ class App extends Component {
             <Button
               variant="contained"
               size="medium"
+              style={{
+                marginTop: "20px",
+                marginBottom: "20px"
+              }}
               onClick={() => this.handleSave()}
             >
               <SaveIcon />
