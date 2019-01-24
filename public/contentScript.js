@@ -1,3 +1,10 @@
+/**
+ * TODO: Update extension default Icon.
+ * TODO: Tests?
+ * TODO: Bundle for release
+ *
+ */
+
 // Update localStorage with username and token
 window.chrome.storage.sync.get(["GHRPR"], function(result) {
   const { username, token } = JSON.parse(result.GHRPR);
