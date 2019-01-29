@@ -27,10 +27,12 @@ class App extends Component {
   }
 
   saveToLocalStorage = (username, token) => {
+    console.log("saveToLocalStorage : ", username, token);
     localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
     window.chrome.tabs.query({ active: true, currentWindow: true }, function(
       tabs
     ) {
+      console.log("app.js tab = ", tabs[0].id);
       window.chrome.tabs.sendMessage(tabs[0].id, {
         data: { username, token }
       });
@@ -45,13 +47,20 @@ class App extends Component {
 
   handleSave = () => {
     const { username, token } = this.state;
+    console.log("username token from app.js = ", username, token);
     const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
     if (localStorageObj) {
+      console.log("fi localStorageObj");
       const { username: oldUsername, token: oldToken } = localStorageObj;
+      console.log("oldusername, oldTOken: ", oldUsername, oldToken);
       if (username !== oldUsername || token !== oldToken) {
+        console.log("not same");
         this.saveToLocalStorage(username, token);
+      } else {
+        this.saveToLocalStorage(oldUsername, oldToken);
       }
     } else {
+      console.log("same as old saving");
       this.saveToLocalStorage(username, token);
     }
   };

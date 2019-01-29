@@ -4,10 +4,9 @@
   "version": "1.0",
   "description": "A chrome extenstion that displays a repos pull requests.",
   "background": {
-    "scripts": ["background.js"],
-    "persistent": false
+    "scripts": ["background.js"]
   },
-  "permissions": ["storage", "declarativeContent", "activeTab"],
+  "permissions": ["storage", "tabs", "activeTab", "*://*/*"],
   "page_action": {
     "default_popup": "index.html"
   },
@@ -18,5 +17,18 @@
       "js": ["contentScript.js"]
     }
   ],
-  "manifest_version": 3
+  "manifest_version": 2,
+  "icons": {
+    "48": "icon.svg",
+    "96": "icon.svg"
+  },
+  // browser_specific_settings is not supported in chrome...
+  // but is needed in FF, as FF needs an ID on the addon to access
+  // localStorage. . . .  soooo. .
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "ghrpr@ghrpr.com",
+      "strict_min_version": "42.0"
+    }
+  }
 }
