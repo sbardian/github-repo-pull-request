@@ -21,6 +21,14 @@ class App extends Component {
         username,
         token
       });
+      window.chrome.tabs.query({ active: true, currentWindow: true }, function(
+        tabs
+      ) {
+        console.log("app.js tab = ", tabs[0].id);
+        window.chrome.tabs.sendMessage(tabs[0].id, {
+          data: { username, token }
+        });
+      });
     } else {
       console.log("No username or token available.");
     }
