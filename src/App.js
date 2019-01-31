@@ -58,18 +58,14 @@ class App extends Component {
     console.log("username token from app.js = ", username, token);
     const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
     if (localStorageObj) {
-      console.log("fi localStorageObj");
       const { username: oldUsername, token: oldToken } = localStorageObj;
-      console.log("oldusername, oldTOken: ", oldUsername, oldToken);
       if (username !== oldUsername || token !== oldToken) {
-        console.log("not same");
         this.saveToLocalStorage(username, token);
       } else {
-        this.saveToLocalStorage(oldUsername, oldToken);
+        console.log("No change to username and/or token");
       }
     } else {
-      console.log("same as old saving");
-      this.saveToLocalStorage(username, token);
+      console.log("Unable to access localStorage");
     }
   };
 
