@@ -6,8 +6,8 @@
  */
 
 // Update localStorage with username and token
-chrome.storage.local.get(["username", "token"], function(result) {
-  const { username, token } = result;
+chrome.storage.local.get(["GHRPR"], function(result) {
+  const { username, token } = result.GHRPR;
   if (username && token) {
     insertPullRequests(username, token);
   } else {
@@ -20,8 +20,10 @@ chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
   if (request.data) {
     const { username, token } = request.data;
     chrome.storage.local.set({
-      username: username,
-      token: token
+      GHRPR: {
+        username: username,
+        token: token
+      }
     });
     insertPullRequests(username, token);
     sendResponse({ error: false });
