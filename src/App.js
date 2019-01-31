@@ -77,20 +77,22 @@ class App extends Component {
     const { username, token } = this.state;
 
     return (
-      <div className="App" style={{ height: "200px", width: "300px" }}>
+      <div className="App" style={{ padding: "20px" }}>
         <form
           autoCapitalize="off"
           autoComplete="off"
           style={{
             display: "flex",
             flexWrap: "wrap",
-            justifyContent: "center"
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            minWidth: "325px"
           }}
         >
           <div
             style={{
               fontSize: "18pt",
-              marginTop: "20px",
               marginBottom: "20px"
             }}
           >
@@ -117,8 +119,7 @@ class App extends Component {
               variant="contained"
               size="medium"
               style={{
-                marginTop: "20px",
-                marginBottom: "20px"
+                marginTop: "20px"
               }}
               onClick={() => this.handleSave()}
             >
