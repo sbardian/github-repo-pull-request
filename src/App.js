@@ -24,7 +24,6 @@ class App extends Component {
       window.chrome.tabs.query({ active: true, currentWindow: true }, function(
         tabs
       ) {
-        console.log("app.js tab = ", tabs[0].id);
         window.chrome.tabs.sendMessage(tabs[0].id, {
           data: { username, token }
         });
@@ -35,12 +34,10 @@ class App extends Component {
   }
 
   saveToLocalStorage = (username, token) => {
-    console.log("saveToLocalStorage : ", username, token);
     localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
     window.chrome.tabs.query({ active: true, currentWindow: true }, function(
       tabs
     ) {
-      console.log("app.js tab = ", tabs[0].id);
       window.chrome.tabs.sendMessage(tabs[0].id, {
         data: { username, token }
       });
@@ -55,7 +52,6 @@ class App extends Component {
 
   handleSave = () => {
     const { username, token } = this.state;
-    console.log("username token from app.js = ", username, token);
     const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
     if (localStorageObj) {
       const { username: oldUsername, token: oldToken } = localStorageObj;
@@ -65,7 +61,8 @@ class App extends Component {
         console.log("No change to username and/or token");
       }
     } else {
-      console.log("Unable to access localStorage");
+      console.log("Unable to access localStorage, saving data");
+      this.saveToLocalStorage(username, token);
     }
   };
 
