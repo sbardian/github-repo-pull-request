@@ -5,26 +5,23 @@
  *
  */
 
-console.log("running ContentScript. . . ");
-
 // Update localStorage with username and token
-// chrome.storage.sync.get(["GHRPR"], function(result) {
-//   const { username, token } = JSON.parse(result.GHRPR);
-//   if (username && token) {
-//     console.log("found username token: ", username, token);
-//     insertPullRequests(username, token);
-//   } else {
-//     console.log("Counldn't find username and/or token");
-//   }
-// });
+chrome.storage.local.get(["username", "token"], function(result) {
+  const { username, token } = result;
+  if (username && token) {
+    insertPullRequests(username, token);
+  } else {
+    console.log("Counldn't find username and/or token");
+  }
+});
 
 // Get username and token message from popup
 chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  console.log("saving username and token to contentScript localStorage");
   if (request.data) {
     const { username, token } = request.data;
-    chrome.storage.sync.set({
-      GHRPR: JSON.stringify({ username, token })
+    chrome.storage.local.set({
+      username: username,
+      token: token
     });
     insertPullRequests(username, token);
     sendResponse({ error: false });
