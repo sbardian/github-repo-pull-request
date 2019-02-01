@@ -57,6 +57,14 @@ class App extends Component {
       const { username: oldUsername, token: oldToken } = localStorageObj;
       if (username !== oldUsername || token !== oldToken) {
         this.saveToLocalStorage(username, token);
+        window.chrome.tabs.query(
+          { active: true, currentWindow: true },
+          function(tabs) {
+            window.chrome.tabs.sendMessage(tabs[0].id, {
+              data: { username, token }
+            });
+          }
+        );
       } else {
         console.log("No change to username and/or token");
       }
