@@ -1,7 +1,7 @@
 {
   "short_name": "Github Repo Pull Requests Extension",
   "name": "Github Repo Pull Requests Extension",
-  "version": "1.0",
+  "version": "1.1",
   "description": "A chrome extenstion that displays a repos pull requests.",
   "background": {
     "scripts": ["background.js"]
