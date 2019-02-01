@@ -29,7 +29,7 @@ class App extends Component {
         });
       });
     } else {
-      console.log("No username or token available.");
+      console.log("No username or token");
     }
   }
 
