@@ -12,7 +12,6 @@ class App extends Component {
   }
 
   componentDidMount() {
-    // const { username, token } = JSON.parse(localStorage.getItem("GHRPR"));
     const GHRPR = localStorage.getItem("GHRPR");
     if (GHRPR) {
       const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
