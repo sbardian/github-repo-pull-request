@@ -1,4 +1,4 @@
-![WIP](https://img.shields.io/badge/WIP-DO%20NOT%20USE-red.svg)
+[![CircleCI](https://circleci.com/gh/sbardian/github-repo-pull-request/tree/develop.svg?style=shield)](https://circleci.com/gh/sbardian/github-repo-pull-request/tree/develop)
 
 ## Github Repository Pull Requests
 
