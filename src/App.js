@@ -1,136 +1,127 @@
-import React, { Component } from "react";
-import { Button, TextField } from "@material-ui/core";
-import SaveIcon from "@material-ui/icons/Save";
+import React from "react"
+import { Button, TextField } from "@material-ui/core"
+import SaveIcon from "@material-ui/icons/Save"
 
-class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      username: "",
-      token: ""
-    };
-  }
+const App = () => {
+  const [username, setUsername] = React.useState()
+  const [token, setToken] = React.useState()
 
-  componentDidMount() {
-    const GHRPR = localStorage.getItem("GHRPR");
+  React.useEffect(() => {
+    const GHRPR = localStorage.getItem("GHRPR")
     if (GHRPR) {
-      const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
-      const { username, token } = localStorageObj;
-      this.setState({
-        username,
-        token
-      });
-      window.chrome.tabs.query({ active: true, currentWindow: true }, function(
+      const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"))
+      const { username, token } = localStorageObj
+      setUsername(username)
+      setToken(token)
+      window.chrome.tabs.query({ active: true, currentWindow: true }, function (
         tabs
       ) {
         window.chrome.tabs.sendMessage(tabs[0].id, {
-          data: { username, token }
-        });
-      });
+          data: { username, token },
+        })
+      })
     } else {
-      console.log("No username or token");
+      console.log("No username or token")
     }
-  }
+  }, [])
 
-  saveToLocalStorage = (username, token) => {
-    localStorage.setItem("GHRPR", JSON.stringify({ username, token }));
-    window.chrome.tabs.query({ active: true, currentWindow: true }, function(
+  const saveToLocalStorage = (username, token) => {
+    localStorage.setItem("GHRPR", JSON.stringify({ username, token }))
+    window.chrome.tabs.query({ active: true, currentWindow: true }, function (
       tabs
     ) {
       window.chrome.tabs.sendMessage(tabs[0].id, {
-        data: { username, token }
-      });
-    });
-  };
+        data: { username, token },
+      })
+    })
+  }
 
-  handleChange = name => event => {
-    this.setState({
-      [name]: event.target.value
-    });
-  };
-
-  handleSave = () => {
-    const { username, token } = this.state;
-    const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"));
+  const handleSave = () => {
+    const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"))
     if (localStorageObj) {
-      const { username: oldUsername, token: oldToken } = localStorageObj;
+      const { username: oldUsername, token: oldToken } = localStorageObj
       if (username !== oldUsername || token !== oldToken) {
-        this.saveToLocalStorage(username, token);
+        saveToLocalStorage(username, token)
         window.chrome.tabs.query(
           { active: true, currentWindow: true },
-          function(tabs) {
+          function (tabs) {
             window.chrome.tabs.sendMessage(tabs[0].id, {
-              data: { username, token }
-            });
+              data: { username, token },
+            })
           }
-        );
+        )
       } else {
-        console.log("No change to username and/or token");
+        console.log("No change to username and/or token")
       }
     } else {
-      console.log("Unable to access localStorage, saving data");
-      this.saveToLocalStorage(username, token);
+      console.log("Unable to access localStorage, saving data")
+      saveToLocalStorage(username, token)
     }
-  };
+  }
 
-  render() {
-    const { username, token } = this.state;
+  const handleChange = (name) => (event) => {
+    if (name === "username") {
+      setUsername(event.target.value)
+    }
+    if (name === "token") {
+      setToken(event.target.value)
+    }
+  }
 
-    return (
-      <div className="App" style={{ padding: "20px" }}>
-        <form
-          autoCapitalize="off"
-          autoComplete="off"
+  return (
+    <div className="App" style={{ padding: "20px" }}>
+      <form
+        autoCapitalize="off"
+        autoComplete="off"
+        style={{
+          display: "flex",
+          flexWrap: "wrap",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          minWidth: "325px",
+        }}
+      >
+        <div
           style={{
-            display: "flex",
-            flexWrap: "wrap",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            minWidth: "325px"
+            fontSize: "18pt",
+            marginBottom: "20px",
           }}
         >
-          <div
+          GitHub Repo Pull Requests
+        </div>
+        <TextField
+          id="outlined-name"
+          label="Github Username"
+          value={username}
+          onChange={handleChange("username")}
+          margin="normal"
+          variant="outlined"
+        />
+        <TextField
+          id="outlined-name"
+          label="Access Token"
+          value={token}
+          onChange={handleChange("token")}
+          margin="normal"
+          variant="outlined"
+        />
+        <div>
+          <Button
+            variant="contained"
+            size="medium"
             style={{
-              fontSize: "18pt",
-              marginBottom: "20px"
+              marginTop: "20px",
             }}
+            onClick={() => handleSave()}
           >
-            GitHub Repo Pull Requests
-          </div>
-          <TextField
-            id="outlined-name"
-            label="Github Username"
-            value={username}
-            onChange={this.handleChange("username")}
-            margin="normal"
-            variant="outlined"
-          />
-          <TextField
-            id="outlined-name"
-            label="Access Token"
-            value={token}
-            onChange={this.handleChange("token")}
-            margin="normal"
-            variant="outlined"
-          />
-          <div>
-            <Button
-              variant="contained"
-              size="medium"
-              style={{
-                marginTop: "20px"
-              }}
-              onClick={() => this.handleSave()}
-            >
-              <SaveIcon />
-              Save
-            </Button>
-          </div>
-        </form>
-      </div>
-    );
-  }
+            <SaveIcon />
+            Save
+          </Button>
+        </div>
+      </form>
+    </div>
+  )
 }
 
-export default App;
+export default App
