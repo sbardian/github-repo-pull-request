@@ -11,8 +11,6 @@ const App = () => {
     if (GHRPR) {
       const localStorageObj = JSON.parse(localStorage.getItem("GHRPR"))
       const { username, token } = localStorageObj
-      setUsername(username)
-      setToken(token)
       window.chrome.tabs.query({ active: true, currentWindow: true }, function (
         tabs
       ) {
